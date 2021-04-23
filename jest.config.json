@@ -1,22 +1,3 @@
 {
-  
+  "testRegex": "((\\.|/*.)(spec))\\.js?$"
 }
-
-module.exports = {
-  coverageDirectory: '<rootDir>/coverage',
-  coverageReporters: ['html', 'json', 'text-summary', 'lcov'], 
-  testResultsProcessor: 'jest-sonar-reporter',
-  "testRegex": "((\\.|/*.)(spec))\\.js?$",
-  modulePaths: ['<rootDir>/src'],
-  testEnvironment: 'node',
-  collectCoverage: true,
-  collectCoverageFrom: ['src/**/*.ts', '!**/__Tests__/**'],
-  coverageThreshold: {
-    global: {
-      statements: 40,
-      branches: 30,
-      lines: 40,
-      functions: 25,
-    },
-  },
-};
