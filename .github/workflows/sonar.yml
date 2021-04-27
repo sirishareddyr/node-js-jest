@@ -1,1 +1,49 @@
+# Start by giving a name to your workflow1
+name: Sonarqube Analyze
+on:
+  push:
 
+    branches:
+      - master
+      - feat-sonar-test
+jobs:
+  sonarQubeTrigger:
+    name: SonarQube Trigger
+    runs-on: ubuntu-latest
+    env:
+       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v1
+    - name: Build
+      uses: actions/setup-node@v1
+      with:
+        node-version: '10.x'
+        registry-url: 'https://registry.npmjs.org'
+    - run: npm install
+    - run: npm i -D jest-sonar-reporter
+    - run: npm install -g jest
+    - run: npm run build
+    - run: npm test
+    - run: ls -lrt /home/runner/work/
+      shell: bash
+    - run: ls -lrt /home/runner/work/cweb-pilot-project/cweb-pilot-project/src
+      shell: bash
+# #     - run: ls -lrt /home/runner/work/cweb-pilot-project/cweb-pilot-project/reports
+#       shell: bash
+#     - run: cat /home/runner/work/cweb-pilot-project/cweb-pilot-project/reports/test-report.xml
+#       shell: bash
+    - run: cat /home/runner/work/cweb-pilot-project/cweb-pilot-project/coverage/lcov.info
+      shell: bash
+    - name: SonarQube Scan
+      uses: kitabisa/sonarqube-action@v1.1.0
+      with:
+        host: ${{ secrets.SONAR_URL }}
+        login: ${{ secrets.SONAR_TOKEN }}
+        projectKey: "cweb.cweb-pilot-project"
+        projectName: "cweb-pilot-project"
+        projectBaseDir: "/home/runner/work/cweb-pilot-project/cweb-pilot-project/src"
+        projectVersion: "v0.0.1"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
